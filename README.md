@@ -1,72 +1,99 @@
 # GitScope — GitHub Profile Analyzer
 
-A responsive React dashboard that uses the public GitHub REST API to show a developer's profile, followers, public repositories, stars, and primary programming languages.
+GitScope is a responsive web app for exploring a developer's public GitHub profile and repositories. Enter a username to see their profile details, follower count, repositories, stars, and primary programming languages in one dashboard.
+
+**Live site:** [github-profile-analyzer-alpha-one.vercel.app](https://github-profile-analyzer-alpha-one.vercel.app/)
+
+## Features
+
+- **Profile lookup:** View the avatar, name, bio, location, company, followers, following, and public repository count.
+- **Repository explorer:** Browse public repositories with descriptions, stars, forks, primary language, and direct GitHub links.
+- **Search and organize:** Search loaded repositories by name or description, filter by language, and sort by recent updates, stars, or name.
+- **Language overview:** See how many loaded, non-fork repositories list each primary language.
+- **Load more:** Fetch repositories in pages of up to 100.
+- **Light and dark themes:** Switch themes with a toggle; the choice is remembered in the browser.
+- **Error handling:** Messages for invalid usernames, missing profiles, network failures, and GitHub API limits.
+- **Responsive design:** Works on desktop and mobile screens.
+
+## Tech stack
+
+| Part | Technology |
+| --- | --- |
+| Frontend | React |
+| Build tool | Vite |
+| Styling | CSS |
+| Data | GitHub REST API |
+| Deployment | Vercel |
+
+## How it works
+
+GitScope requests public data from these GitHub REST API endpoints:
+
+```text
+GET https://api.github.com/users/{username}
+GET https://api.github.com/users/{username}/repos?per_page=100&page={page}&sort=updated
+```
+
+The app combines profile and repository data, then calculates the language overview from each loaded repository's **primary language**. Repository search, filtering, and sorting happen in the browser.
+
+**Note:** The language overview counts repositories, not lines of code. Search and filtering cover repositories loaded so far; use **Load more repositories** to include additional pages. The app uses the API without a token, so GitHub may temporarily limit repeated requests.
 
 ## Run locally
 
-Install [Node.js](https://nodejs.org/) (version 18 or newer). In a terminal inside this folder:
+Install [Node.js](https://nodejs.org/) version 18 or newer. Open a terminal in the folder containing `package.json` and run:
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open the local URL printed by Vite, usually `http://localhost:5173`.
+Open the URL printed by Vite, usually `http://localhost:5173`.
 
-**Windows PowerShell:** If it says `npm.ps1 cannot be loaded because running scripts is disabled`, use these commands instead, one at a time:
+If PowerShell blocks `npm.ps1`, use:
 
 ```powershell
 npm.cmd install
 npm.cmd run dev
 ```
 
-## Features
+## Build and deploy
 
-- Search for a GitHub username, including `@username` input
-- Profile avatar, name, bio, follower count, and GitHub link
-- Public repositories with descriptions, stars, forks, and primary language
-- Search loaded repositories by name or description, filter by language, and sort by update date, stars, or name
-- Language breakdown of loaded, non-fork repositories
-- Pagination with **Load more** for profiles with over 100 repositories
-- Helpful username, network, missing user, and API limit error messages
-- Responsive desktop and mobile layouts
-- Greptile-inspired editorial layout with original graphics and a light/dark mode toggle that remembers your choice
+Check the production build:
 
-The language breakdown counts each repository's **primary language**, not lines of code. GitHub may restrict unauthenticated API requests, so an API limit message may appear after repeated searches. No API token is required or included.
-
-## Deploy to Vercel
-
-### Option A: Vercel website
-
-1. Create an empty GitHub repository and push this folder to it (instructions below).
-2. On [vercel.com/new](https://vercel.com/new), import that repository.
-3. Use **Vite** as the framework. The build command is `npm run build` and the output directory is `dist` (Vercel normally detects both).
-4. Click **Deploy**. Vercel provides a public `*.vercel.app` link.
-
-### Option B: Vercel CLI
-
-Run `npx vercel` inside this folder, sign in when prompted, then run `npx vercel --prod` to deploy publicly. The first command may ask to link or create a project.
-
-## Push to GitHub
-
-From this folder, replace `YOUR_USERNAME` with your GitHub username:
-
-```bash
-git init
-git add .
-git commit -m "Build GitHub profile analyzer"
-git branch -M main
-git remote add origin https://github.com/YOUR_USERNAME/github-profile-analyzer.git
-git push -u origin main
+```powershell
+npm.cmd run build
 ```
 
-Create the empty repository on GitHub before the `git push` command. GitHub may ask you to sign in. Do not commit `node_modules`, `dist`, or credentials; `.gitignore` excludes them.
+Deploy from the project folder:
+
+```powershell
+npx.cmd vercel@latest login
+npx.cmd vercel@latest --prod
+```
+
+The deployed app is available at the [live site](https://github-profile-analyzer-alpha-one.vercel.app/).
 
 ## Project structure
 
 ```text
-src/App.jsx       Dashboard UI and interaction
-src/github.js     GitHub API requests and data helpers
-src/styles.css    Responsive visual design
-src/main.jsx      React entry point
+github-profile-analyzer/
+├── src/
+│   ├── App.jsx        # Dashboard and interactions
+│   ├── github.js      # GitHub API requests and data helpers
+│   ├── styles.css     # Responsive layout and themes
+│   └── main.jsx       # React entry point
+├── index.html
+├── package.json
+└── vite.config.js
 ```
+
+## Assignment requirements covered
+
+| Requirement | In GitScope |
+| --- | --- |
+| Enter a GitHub username | Profile search form |
+| Show profile picture, name, bio, followers | Profile card |
+| Show repositories, stars, languages | Repository cards |
+| Search or filter repositories | Search field and language filter |
+| Handle invalid users and API errors | Validation and error messages |
+| Responsive dashboard | Desktop and mobile CSS layouts |
